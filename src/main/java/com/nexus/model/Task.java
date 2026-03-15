@@ -2,6 +2,8 @@ package com.nexus.model;
 
 import java.time.LocalDate;
 
+import com.nexus.exception.NexusValidationException;
+
 public class Task {
     // Métricas Globais (Alunos implementam a lógica de incremento/decremento)
     public static int totalTasksCreated = 0;
@@ -10,8 +12,8 @@ public class Task {
 
     private static int nextId = 1;
 
-    private int id;
-    private LocalDate deadline; // Imutável após o nascimento
+    private final int id;               // Imutável após o nascimento
+    private final LocalDate deadline;   // Imutável após o nascimento
     private String title;
     private TaskStatus status;
     private User owner;
@@ -33,6 +35,20 @@ public class Task {
     public void moveToInProgress(User user) {
         // TODO: Implementar lógica de proteção e atualizar activeWorkload
         // Se falhar, incrementar totalValidationErrors e lançar NexusValidationException
+        if(user.consultUsername().isBlank() &&  this.owner.consultUsername().isBlank()){
+            totalValidationErrors++;
+            throw new NexusValidationException("Não é possível atribuir uma tarefa sem especificar um owner.");
+        } else if (this.status == TaskStatus.BLOCKED){
+            totalValidationErrors++;
+            throw new NexusValidationException(String.format(
+                "A tarefa %i está bloqueada. Não é possível alterar o status para \'Em progresso\'.", this.id));
+        }
+
+        this.owner = user;
+        this.status = TaskStatus.IN_PROGRESS;
+
+        activeWorkload++;
+
     }
 
     /**
@@ -41,10 +57,20 @@ public class Task {
      */
     public void markAsDone() {
         // TODO: Implementar lógica de proteção e atualizar activeWorkload (decrementar)
+        if (this.status == TaskStatus.BLOCKED){
+            totalValidationErrors++;
+            throw new NexusValidationException(String.format(
+                "A tarefa %i está bloqueada. Não é possível alterar o status para \'Finalizada\'.", this.id));
+        }
+
+        // this.owner = null; (validar se é necessario essa condição)
+        this.status = TaskStatus.DONE;
+
+        activeWorkload--;
     }
 
     public void setBlocked(boolean blocked) {
-        if (blocked) {
+        if (blocked && this.status != TaskStatus.DONE) { //Só é possível mudar para blocked se não estiver em DONE
             this.status = TaskStatus.BLOCKED;
         } else {
             this.status = TaskStatus.TO_DO; // Simplificação para o Lab
