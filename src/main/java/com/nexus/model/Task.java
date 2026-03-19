@@ -17,6 +17,7 @@ public class Task {
     private String title;
     private TaskStatus status;
     private User owner;
+    private int estimatedEffort;
 
     public Task(String title, LocalDate deadline) {
         this.id = nextId++;
@@ -78,9 +79,27 @@ public class Task {
     }
 
     // Getters
-    public int getId() { return id; }
-    public TaskStatus getStatus() { return status; }
-    public String getTitle() { return title; }
-    public LocalDate getDeadline() { return deadline; }
-    public User getOwner() { return owner; }
+    public int getId() { 
+        return id; 
+    }
+
+    public TaskStatus getStatus() { 
+        return status; 
+    }
+
+    public String getTitle() { 
+        return title; 
+    }
+
+    public LocalDate getDeadline() { 
+        return deadline; 
+    }
+
+    public User getOwner() { 
+        return owner; 
+    }
+
+    public int getEstimatedEffort() {
+        return estimatedEffort;
+    }
 }

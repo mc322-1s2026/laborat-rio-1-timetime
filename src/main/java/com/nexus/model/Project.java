@@ -1,0 +1,34 @@
+package com.nexus.model;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import com.nexus.exception.NexusValidationException;
+
+public class Project {
+    private String projectName;
+    private List<Task> tasks;
+    private int totalBudget; // Horas de trabalho alocadas para o projeto
+
+    public Project(String projectName, List<Task> tasks, int totalBudget) {
+        // Verify each attribute
+        if (projectName == null || projectName.trim().isBlank()) {
+            throw new NexusValidationException("O nome do projeto não pode ser vazio.");
+        }
+        if (tasks == null) {
+            throw new NexusValidationException("O projeto deve possuir tasks.");
+        }
+        this.projectName = projectName;
+        this.tasks = tasks;
+        this.totalBudget = totalBudget;
+    }
+
+    public void addTask(Task new_task) {
+        // Verify if the current tasks hours excced the budget.
+        Stream<Task> tasksStream = tasks.stream();
+        if (tasksStream.mapToInt(task -> task.getEstimatedEffort()).sum() + new_task.getEstimatedEffort() > totalBudget) {
+            throw new NexusValidationException("A soma das horas das tasks excederam o limite máximo de horas do projeto.");
+        } else {
+            tasks.add(new_task);
+        }
+    }
+}
