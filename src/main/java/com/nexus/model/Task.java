@@ -1,7 +1,6 @@
 package com.nexus.model;
 
 import java.time.LocalDate;
-
 import com.nexus.exception.NexusValidationException;
 
 public class Task {
@@ -42,7 +41,8 @@ public class Task {
         if(user.consultUsername().isBlank() &&  this.owner.consultUsername().isBlank()){
             totalValidationErrors++;
             throw new NexusValidationException("Não é possível atribuir uma tarefa sem especificar um owner.");
-        } else if (this.status == TaskStatus.BLOCKED){
+        } 
+        else if (this.status == TaskStatus.BLOCKED){
             totalValidationErrors++;
             throw new NexusValidationException(String.format(
                 "A tarefa %i está bloqueada. Não é possível alterar o status para \'Em progresso\'.", this.id));

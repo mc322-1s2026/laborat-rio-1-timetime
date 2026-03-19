@@ -52,20 +52,44 @@ public class LogProcessor {
                             }
                             case "ASSIGN_USER" -> {
                                 // ASSIGN_USER;taskId;username
-                                // Locate task through task ID and 
-                                // user through username -> ENSURE Username to be UNIQUE! 
-                                Task task = workspace.getTaskById(Integer.parseInt(p[1]));
-                                User user = users.stream()
-                                    .filter(u -> u.consultUsername() == p[2])
-                                    .findFirst()
-                                    .orElse(null);
-                                task.setOwner(user);
+                                try {
+                                    Task task = workspace.getTaskById(Integer.parseInt(p[1]));
+                                    User user = users.stream()
+                                        .filter(u -> u.consultUsername() == p[2])
+                                        .findFirst()
+                                        .orElse(null);
+                                    task.setOwner(user);
+                                } catch(NexusValidationException e) {
+                                    System.err.println("[ERRO] Não foi possível definir o owner da task: " + e.getMessage());
+                                }
                             }
                             case "CHANGE_STATUS" -> {
                                 // CHANGE_STATUS;taskId;newStatus
+                                try {
+                                    Task task = workspace.getTaskById(Integer.parseInt(p[1]));
+                                    if (TaskStatus.valueOf(p[3]) == task.getStatus()) {
+                                        break;
+                                    }
+                                    else if (TaskStatus.valueOf(p[3]) == TaskStatus.IN_PROGRESS) {
+                                        task.moveToInProgress(task.getOwner());
+                                    } 
+                                    else if (TaskStatus.valueOf(p[3]) == TaskStatus.DONE) {
+                                        task.markAsDone();
+                                    } 
+                                    else if (TaskStatus.valueOf(p[3]) == TaskStatus.BLOCKED) {
+                                        task.setBlocked(task.getStatus() == TaskStatus.BLOCKED);
+                                    } 
+                                } catch(NexusValidationException e) {
+                                    System.err.println("[ERRO] Não foi possível alterar o status da tarefa: " + e.getMessage());
+                                }
+
                             }
                             case "REPORT_STATUS" -> {
                                 // REPORT_STATUS: Aciona a impressão dos relatórios analíticos (Streams) no console.
+                                System.out.println("Top Performers: ");
+                                System.out.println("Overloaded Users: ");
+                                System.out.println("Project Health: ");
+                                System.out.println("Global Bottlenecks");
                             }
                             default -> System.err.println("[WARN] Ação desconhecida: " + action);
                         }
