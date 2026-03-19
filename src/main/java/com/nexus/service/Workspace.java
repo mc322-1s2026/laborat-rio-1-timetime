@@ -5,7 +5,9 @@ import com.nexus.model.User;
 import com.nexus.model.TaskStatus;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class Workspace {
     private final List<Task> tasks = new ArrayList<>();
@@ -26,33 +28,40 @@ public class Workspace {
             .orElse(null);
     }
 
-    // public List<User> topPerformers() {
-    //     // Retorna top 3 usuários com mais tarefas concluídas (STATUS == DONE)
-    // }
+    public List<User> topPerformers() {
+        return tasks.stream()
+            .filter(t -> t.getStatus() == TaskStatus.DONE)           
+            .collect(Collectors.groupingBy(Task::getOwner, Collectors.counting()))
+            .entrySet().stream()
+            .sorted(Map.Entry.<User, Long>comparingByValue().reversed()) 
+            .limit(3)                                                
+            .map(Map.Entry::getKey)                                   
+            .toList();                                               
+    }
 
     public List<User> overloadedUsers() {
-        // Retorna todos usuários com carga de trabalho > 10 tasks com STATUS == in PROGRESS
         return tasks.stream()
-            .filter(t -> t.getStatus() == TaskStatus.IN_PROGRESS)
+            .filter(t -> t.getStatus().equals(TaskStatus.IN_PROGRESS))
             .map(Task::getOwner)
-            .filter(u -> u.calculateWorkload() > 10)
+            .filter(u -> u.calculateWorkload() > 10)    
             .distinct()
             .toList();
     }
 
     public float projectHealth() {
-        // Retorna percentual de conclusão do projeto, ou seja, tasks DONE / total tasks
-        long doneTasks = tasks.stream()
-            .filter(t -> t.getStatus() == TaskStatus.DONE)
-            .count();
+        long doneTasks = tasks.stream().filter(t -> t.getStatus().equals(TaskStatus.DONE)).count();
         
-        long totalTasks = tasks.stream()
-            .count();
+        long totalTasks = tasks.size();
         
         return (doneTasks / totalTasks);
     }
 
-    // public TaskStatus globalBottlenecks() {
-    //     // Verificar qual status possui maior n de tarefas no sistema - {DONE}
-    // }
+    public TaskStatus globalBottlenecks() {
+        return tasks.stream()
+        .filter(t -> t.getStatus() != TaskStatus.DONE)
+        .collect(Collectors.groupingBy(Task::getStatus, Collectors.counting()))
+        .entrySet().stream().max(Map.Entry.comparingByValue())
+        .map(Map.Entry::getKey)
+        .orElse(null);    
+    }
 }

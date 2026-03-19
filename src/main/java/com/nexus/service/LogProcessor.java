@@ -44,7 +44,7 @@ public class LogProcessor {
                                 Task t = new Task(p[1], LocalDate.parse(p[2]), Integer.parseInt(p[3]), p[4]);
                                 workspace.addTask(t);
                                 Project project = projects.stream()
-                                    .filter(proj -> proj.getProjectName() == p[4])
+                                    .filter(proj -> proj.getProjectName().equals(p[4]))
                                     .findFirst()
                                     .orElse(null);
                                 project.addTask(t);
@@ -55,7 +55,7 @@ public class LogProcessor {
                                 try {
                                     Task task = workspace.getTaskById(Integer.parseInt(p[1]));
                                     User user = users.stream()
-                                        .filter(u -> u.consultUsername() == p[2])
+                                        .filter(u -> u.consultUsername().equals(p[2]))
                                         .findFirst()
                                         .orElse(null);
                                     task.setOwner(user);
@@ -67,16 +67,16 @@ public class LogProcessor {
                                 // CHANGE_STATUS;taskId;newStatus
                                 try {
                                     Task task = workspace.getTaskById(Integer.parseInt(p[1]));
-                                    if (TaskStatus.valueOf(p[3]) == task.getStatus()) {
+                                    if (TaskStatus.valueOf(p[3]).equals(task.getStatus())) {
                                         break;
                                     }
-                                    else if (TaskStatus.valueOf(p[3]) == TaskStatus.IN_PROGRESS) {
+                                    else if (TaskStatus.valueOf(p[3]).equals(TaskStatus.IN_PROGRESS)) {
                                         task.moveToInProgress(task.getOwner());
                                     } 
-                                    else if (TaskStatus.valueOf(p[3]) == TaskStatus.DONE) {
+                                    else if (TaskStatus.valueOf(p[3]).equals(TaskStatus.DONE)) {
                                         task.markAsDone();
                                     } 
-                                    else if (TaskStatus.valueOf(p[3]) == TaskStatus.BLOCKED) {
+                                    else if (TaskStatus.valueOf(p[3]).equals(TaskStatus.BLOCKED)) {
                                         task.setBlocked(task.getStatus() == TaskStatus.BLOCKED);
                                     } 
                                 } catch(NexusValidationException e) {
@@ -86,10 +86,10 @@ public class LogProcessor {
                             }
                             case "REPORT_STATUS" -> {
                                 // REPORT_STATUS: Aciona a impressão dos relatórios analíticos (Streams) no console.
-                                System.out.println("Top Performers: ");
-                                System.out.println("Overloaded Users: ");
-                                System.out.println("Project Health: ");
-                                System.out.println("Global Bottlenecks");
+                                System.out.println("Top Performers: " + workspace.topPerformers());
+                                System.out.println("Overloaded Users: " + workspace.overloadedUsers());
+                                System.out.println("Project Health: " + workspace.projectHealth());
+                                System.out.println("Global Bottlenecks: " + workspace.globalBottlenecks());
                             }
                             default -> System.err.println("[WARN] Ação desconhecida: " + action);
                         }
