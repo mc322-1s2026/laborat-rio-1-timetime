@@ -31,4 +31,17 @@ public class Project {
             tasks.add(new_task);
         }
     }
+
+    // Getters
+    public String getProjectName() {    
+        return projectName;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public int getTotalBudget() {
+        return totalBudget;
+    }
 }
