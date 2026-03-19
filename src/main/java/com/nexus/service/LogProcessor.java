@@ -43,10 +43,23 @@ public class LogProcessor {
                                 // CREATE_TASK;taskName;deadline;effort;projectName
                                 Task t = new Task(p[1], LocalDate.parse(p[2]), Integer.parseInt(p[3]), p[4]);
                                 workspace.addTask(t);
+                                Project project = projects.stream()
+                                    .filter(proj -> proj.getProjectName() == p[4])
+                                    .findFirst()
+                                    .orElse(null);
+                                project.addTask(t);
                                 System.out.println("[LOG] Tarefa criada: " + p[1]);
                             }
                             case "ASSIGN_USER" -> {
                                 // ASSIGN_USER;taskId;username
+                                // Locate task through task ID and 
+                                // user through username -> ENSURE Username to be UNIQUE! 
+                                Task task = workspace.getTaskById(Integer.parseInt(p[1]));
+                                User user = users.stream()
+                                    .filter(u -> u.consultUsername() == p[2])
+                                    .findFirst()
+                                    .orElse(null);
+                                task.setOwner(user);
                             }
                             case "CHANGE_STATUS" -> {
                                 // CHANGE_STATUS;taskId;newStatus

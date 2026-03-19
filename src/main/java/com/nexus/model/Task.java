@@ -81,6 +81,10 @@ public class Task {
         }
     }
 
+    public void setOwner(User user) {
+        this.owner = user;
+    }
+
     // Getters
     public int getId() { 
         return id; 

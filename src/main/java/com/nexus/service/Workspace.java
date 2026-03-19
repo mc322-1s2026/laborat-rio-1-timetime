@@ -19,6 +19,13 @@ public class Workspace {
         return Collections.unmodifiableList(tasks);
     }
 
+    public Task getTaskById(int id) {
+        return tasks.stream()
+            .filter(t -> t.getId() == id)
+            .findFirst()
+            .orElse(null);
+    }
+
     // public List<User> topPerformers() {
     //     // Retorna top 3 usuários com mais tarefas concluídas (STATUS == DONE)
     // }
