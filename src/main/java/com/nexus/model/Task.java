@@ -18,12 +18,15 @@ public class Task {
     private TaskStatus status;
     private User owner;
     private int estimatedEffort;
+    private String projectName;
 
-    public Task(String title, LocalDate deadline) {
+    public Task(String title, LocalDate deadline, int estimatedEffort, String projectName) {
         this.id = nextId++;
         this.deadline = deadline;
         this.title = title;
         this.status = TaskStatus.TO_DO;
+        this.estimatedEffort = estimatedEffort;
+        this.projectName = projectName;
         
         // Ação do Aluno:
         totalTasksCreated++; 

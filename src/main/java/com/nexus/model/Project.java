@@ -1,4 +1,5 @@
 package com.nexus.model;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -6,10 +7,10 @@ import com.nexus.exception.NexusValidationException;
 
 public class Project {
     private String projectName;
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
     private int totalBudget; // Horas de trabalho alocadas para o projeto
 
-    public Project(String projectName, List<Task> tasks, int totalBudget) {
+    public Project(String projectName, int totalBudget) {
         // Verify each attribute
         if (projectName == null || projectName.trim().isBlank()) {
             throw new NexusValidationException("O nome do projeto não pode ser vazio.");
@@ -18,7 +19,6 @@ public class Project {
             throw new NexusValidationException("O projeto deve possuir tasks.");
         }
         this.projectName = projectName;
-        this.tasks = tasks;
         this.totalBudget = totalBudget;
     }
 

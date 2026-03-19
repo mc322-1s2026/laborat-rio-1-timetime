@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.nexus.exception.NexusValidationException;
 import com.nexus.model.Task;
 import com.nexus.model.User;
+import com.nexus.model.Project;
 import com.nexus.service.LogProcessor;
 import com.nexus.service.Workspace;
 
@@ -25,6 +26,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Workspace workspace = new Workspace();
     private static final List<User> users = new ArrayList<>();
+    private static final List<Project> projects = new ArrayList<>();
     private static final LogProcessor logProcessor = new LogProcessor();
 
     /**
@@ -45,13 +47,14 @@ public class Main {
                     running = false;
                 }
                 case "1" -> addUser();
-                case "2" -> addTask();
-                case "3" -> listTasks();
-                case "4" -> {
+                case "2" -> addProject();
+                case "3" -> addTask();
+                case "4" -> listTasks();
+                case "5" -> {
                     System.out.println("1. Carregar Log V1 (Básico)\n2. Carregar Log V2 (Desafio)");
                     String logChoice = scanner.nextLine();
                     String file = (logChoice.equals("1")) ? "log_v1.txt" : "log_v2.txt";
-                    logProcessor.processLog(file, workspace, users);
+                    logProcessor.processLog(file, workspace, users, projects);
                 }
                 default -> System.out.println("\n[!] Opção inválida.");
             }
@@ -69,9 +72,10 @@ public class Main {
             
             ======= NEXUS CORE: MENU =======
             1. Adicionar Usuário
-            2. Adicionar Tarefa
-            3. Listar Todas as Tarefas
-            4. Processar Log de Ações
+            2. Adicionar Projeto
+            3. Adicionar Tarefa
+            4. Listar Todas as Tarefas
+            5. Processar Log de Ações
             0. Sair
             Escolha uma opção:\s""");
     }
@@ -97,6 +101,24 @@ public class Main {
     }
 
     /**
+     * 
+     */
+    private static void addProject() {
+        try {
+            System.out.print("Nome do Projeto: ");
+            String projectName = scanner.nextLine();
+            System.out.print("Prazo (AAAA-MM-DD): ");
+            int budgetHours = scanner.nextInt();
+
+            Project newProject = new Project(projectName, budgetHours);
+            projects.add(newProject);
+            System.out.println("[OK] Projeto adicionado ao backlog.");
+        } catch (NexusValidationException e) {
+            System.err.println("[ERRO] " + e.getMessage());
+        }
+    }
+
+    /**
      * Coleta detalhes da tarefa do usuário, constrói uma {@link Task} e
      * a acrescenta ao workspace. Erros de parsing de data são informados no
      * stderr.
@@ -107,8 +129,12 @@ public class Main {
             String title = scanner.nextLine();
             System.out.print("Prazo (AAAA-MM-DD): ");
             LocalDate deadline = LocalDate.parse(scanner.nextLine());
+            System.out.print("Horas de trabalho necessárias: ");
+            int estimatedEffort = scanner.nextInt();
+            System.out.print("Nome do projeto associado a tarefa: ");
+            String projectName = scanner.nextLine();
 
-            Task newTask = new Task(title, deadline);
+            Task newTask = new Task(title, deadline, estimatedEffort, projectName);
             workspace.addTask(newTask);
             System.out.println("[OK] Tarefa adicionada ao backlog.");
         } catch (DateTimeParseException e) {
