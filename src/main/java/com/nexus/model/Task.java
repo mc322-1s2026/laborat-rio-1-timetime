@@ -102,6 +102,10 @@ public class Task {
         return owner; 
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
     public int getEstimatedEffort() {
         return estimatedEffort;
     }
