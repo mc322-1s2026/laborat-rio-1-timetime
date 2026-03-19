@@ -101,7 +101,9 @@ public class Main {
     }
 
     /**
-     * 
+     * Solicita ao usuário nome e horas necessárias do projeto, cria um novo
+     * {@link Project} e adiciona-o à lista itnerna. Exceções de validação são
+     * relatadas no fluxo de erro.
      */
     private static void addProject() {
         try {

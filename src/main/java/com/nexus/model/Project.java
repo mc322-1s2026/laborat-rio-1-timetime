@@ -9,7 +9,6 @@ public class Project {
     private int totalBudget; // Horas de trabalho alocadas para o projeto
 
     public Project(String projectName, int totalBudget) {
-        // Verify each attribute
         if (projectName == null || projectName.trim().isBlank()) {
             throw new NexusValidationException("O nome do projeto não pode ser vazio.");
         }
@@ -21,7 +20,6 @@ public class Project {
     }
 
     public void addTask(Task new_task) {
-        // Verify if the current tasks hours excced the budget.
         if (new_task == null) {
             throw new IllegalArgumentException("Tarefa não pode ser nula.");
         }

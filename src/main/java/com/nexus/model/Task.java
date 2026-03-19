@@ -50,9 +50,7 @@ public class Task {
 
         this.owner = user;
         this.status = TaskStatus.IN_PROGRESS;
-
         activeWorkload++;
-
     }
 
     /**
