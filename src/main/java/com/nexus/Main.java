@@ -107,9 +107,10 @@ public class Main {
         try {
             System.out.print("Nome do Projeto: ");
             String projectName = scanner.nextLine();
-            System.out.print("Prazo (AAAA-MM-DD): ");
+            System.out.print("Horas necessárias para o projeto: ");
             int budgetHours = scanner.nextInt();
-
+            scanner.nextLine(); 
+            
             Project newProject = new Project(projectName, budgetHours);
             projects.add(newProject);
             System.out.println("[OK] Projeto adicionado ao backlog.");
@@ -131,6 +132,7 @@ public class Main {
             LocalDate deadline = LocalDate.parse(scanner.nextLine());
             System.out.print("Horas de trabalho necessárias: ");
             int estimatedEffort = scanner.nextInt();
+            scanner.nextLine(); 
             System.out.print("Nome do projeto associado a tarefa: ");
             String projectName = scanner.nextLine();
 
