@@ -4,9 +4,9 @@ import java.util.List;
 import com.nexus.exception.NexusValidationException;
 
 public class Project {
-    private String projectName;
+    final private String projectName;
     private List<Task> tasks = new ArrayList<>();
-    private int totalBudget; // Horas de trabalho alocadas para o projeto
+    final private int totalBudget; // Horas de trabalho alocadas para o projeto
 
     public Project(String projectName, int totalBudget) {
         if (projectName == null || projectName.trim().isBlank()) {
