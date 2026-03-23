@@ -18,7 +18,7 @@ public class Workspace {
 
     public List<Task> getTasks() {
         // Retorna uma visão não modificável para garantir encapsulamento
-        return Collections.unmodifiableList(tasks);
+        return List.copyOf(Collections.unmodifiableList(tasks));
     }
 
     public Task getTaskById(int id) {
