@@ -44,15 +44,17 @@ public class Project {
         }
     }
 
-    // Getters
+    /* @return nome do projeto */
     public String getProjectName() {    
         return projectName;
     }
 
+    /* @return lista de tarefas */
     public List<Task> getTasks() {
         return tasks;
     }
 
+    /* @return total de horas para projeto */
     public int getTotalBudget() {
         return totalBudget;
     }

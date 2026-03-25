@@ -31,11 +31,12 @@ public class User {
         this.email = email.trim();
     }
 
-    // Getters
+    /* @return email do usuario */
     public String consultEmail() {
         return email;
     }
 
+    /* @return username do usuario */
     public String consultUsername() {
         return username;
     }
