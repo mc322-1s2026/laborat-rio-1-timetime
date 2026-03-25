@@ -6,8 +6,17 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/* LogProcess Class
+* Responsável por processar um arquivo de log de ações (log.txt) e executar as operações correspondentes no motor Nexus.
+*/
 public class LogProcessor {
 
+    /* processLog lê um arquivo de log linha por linha, interpreta as ações e executa as operações correspondentes no motor Nexus.
+    * @param fileName Nome do arquivo de log a ser processado (deve estar na pasta de recursos do projeto)
+    * @param workspace Instância do Workspace onde as tarefas serão gerenciadas
+    * @param users Lista de usuários do sistema, onde novos usuários serão adicionados
+    * @param projects Lista de projetos do sistema, onde novos projetos serão adicionados
+    */
     public void processLog(String fileName, Workspace workspace, List<User> users, List<Project> projects) {
         try {
             // Busca o arquivo dentro da pasta de recursos do projeto (target/classes)
