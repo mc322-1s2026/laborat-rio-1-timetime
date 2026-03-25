@@ -4,10 +4,16 @@ import java.util.List;
 
 import com.nexus.service.Workspace;
 
+/* User Class representa um usuário do motor Nexus, com um nome de usuário e um e-mail.
+*/
 public class User {
     private final String username;
     private final String email;
 
+    /* Construtor do User.
+    * @param username Nome de usuário do usuário
+    * @param email E-mail do usuário
+    */
     public User(String username, String email) {
         if (username == null || username.trim().isBlank()) {
             throw new IllegalArgumentException("Username não pode ser vazio.");
@@ -25,6 +31,7 @@ public class User {
         this.email = email.trim();
     }
 
+    // Getters
     public String consultEmail() {
         return email;
     }
@@ -33,6 +40,9 @@ public class User {
         return username;
     }
 
+    /* calculateWorkload calcula a carga de trabalho atual do usuário, 
+    * contando o número de tarefas IN_PROGRESS atribuídas a ele.    
+    */
     public long calculateWorkload() {
         List<Task> workspaceTasks = new Workspace().getTasks();
         return 
