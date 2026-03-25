@@ -1,7 +1,6 @@
 package com.nexus.model;
 
 import java.time.LocalDate;
-
 import com.nexus.exception.NexusValidationException;
 
 public class Task {
@@ -17,12 +16,16 @@ public class Task {
     private String title;
     private TaskStatus status;
     private User owner;
+    private int estimatedEffort;
+    private String projectName;
 
-    public Task(String title, LocalDate deadline) {
+    public Task(String title, LocalDate deadline, int estimatedEffort, String projectName) {
         this.id = nextId++;
         this.deadline = deadline;
         this.title = title;
         this.status = TaskStatus.TO_DO;
+        this.estimatedEffort = estimatedEffort;
+        this.projectName = projectName;
         
         // Ação do Aluno:
         totalTasksCreated++; 
@@ -38,7 +41,8 @@ public class Task {
         if(user.consultUsername().isBlank() &&  this.owner.consultUsername().isBlank()){
             totalValidationErrors++;
             throw new NexusValidationException("Não é possível atribuir uma tarefa sem especificar um owner.");
-        } else if (this.status == TaskStatus.BLOCKED){
+        } 
+        else if (this.status == TaskStatus.BLOCKED){
             totalValidationErrors++;
             throw new NexusValidationException(String.format(
                 "A tarefa %i está bloqueada. Não é possível alterar o status para \'Em progresso\'.", this.id));
@@ -46,9 +50,7 @@ public class Task {
 
         this.owner = user;
         this.status = TaskStatus.IN_PROGRESS;
-
         activeWorkload++;
-
     }
 
     /**
@@ -77,10 +79,36 @@ public class Task {
         }
     }
 
+    public void setOwner(User user) {
+        this.owner = user;
+    }
+
     // Getters
-    public int getId() { return id; }
-    public TaskStatus getStatus() { return status; }
-    public String getTitle() { return title; }
-    public LocalDate getDeadline() { return deadline; }
-    public User getOwner() { return owner; }
+    public int getId() { 
+        return id; 
+    }
+
+    public TaskStatus getStatus() { 
+        return status; 
+    }
+
+    public String getTitle() { 
+        return title; 
+    }
+
+    public LocalDate getDeadline() { 
+        return deadline; 
+    }
+
+    public User getOwner() { 
+        return owner; 
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public int getEstimatedEffort() {
+        return estimatedEffort;
+    }
 }

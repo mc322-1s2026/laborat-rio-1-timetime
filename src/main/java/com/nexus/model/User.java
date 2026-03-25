@@ -11,9 +11,11 @@ public class User {
     public User(String username, String email) {
         if (username == null || username.trim().isBlank()) {
             throw new IllegalArgumentException("Username não pode ser vazio.");
-        } else if (email == null || email.trim().isBlank()) {
+        } 
+        else if (email == null || email.trim().isBlank()) {
             throw new IllegalArgumentException("E-mail não pode ser vazio.");
-        } else if ( ! email.trim().matches("^[\\w.-_]+@\\w+\\.[\\a-z]+")){
+        } 
+        else if ( ! email.trim().matches("^[\\w.-_]+@\\w+\\.[\\a-z]+")) {
             throw new IllegalArgumentException(
                 String.format(
                     "O e-mail deve estar no formato \"usuario@dominio.com\". Inserido: \'%s\'."
